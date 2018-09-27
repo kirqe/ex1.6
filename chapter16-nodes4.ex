@@ -23,8 +23,8 @@
 # iex> Ticker.connect
 
 defmodule Ticker do
-  @interval 3000 # 3 seconds instead of 2
-
+  @interval 3000
+  
   def connect do
     case globally_exists?(:origin) do
       {:yes, origin_pid} ->
@@ -52,12 +52,12 @@ defmodule Ticker do
         IO.puts "connected #{inspect pid}"
         receiver(pid)
       {:tick} ->
-        IO.puts "TOCK"
+        IO.puts "TOCK from #{inspect next}"
         receiver(next)
       after
         @interval ->
           unless next == nil do
-            IO.puts "#{inspect next} sending TICK"
+            IO.puts "TICK to #{inspect next}"
             send(next, {:tick})
             receiver(next)
           end
